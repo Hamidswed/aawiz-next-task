@@ -1,72 +1,70 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { ThemeToggle } from './theme-toggle'
-import { Button } from './ui/button'
-import { cn } from '@/lib/utils'
-import { LogOut, User } from 'lucide-react'
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ThemeToggle } from "./theme-toggle";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import { LogOut, User } from "lucide-react";
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Dashboard', href: '/dashboard', requiresAuth: true },
-  { name: 'Contact', href: '/contact' },
-]
+  { name: "Home", href: "/" },
+  { name: "Dashboard", href: "/dashboard", requiresAuth: true },
+  { name: "Contact", href: "/contact" },
+];
 
 export function Navigation() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
-  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAuth = () => {
-      const authStatus = localStorage.getItem('isAuthenticated')
-      const email = localStorage.getItem('userEmail')
-      setIsAuthenticated(authStatus === 'true')
-      setUserEmail(email)
-    }
+      const authStatus = localStorage.getItem("isAuthenticated");
+      const email = localStorage.getItem("userEmail");
+      setIsAuthenticated(authStatus === "true");
+      setUserEmail(email);
+    };
 
-    checkAuth()
-    
+    checkAuth();
+
     // Listen for storage changes (for logout from other tabs)
-    window.addEventListener('storage', checkAuth)
-    
+    window.addEventListener("storage", checkAuth);
+
     // Listen for custom auth events
-    const handleAuthChange = () => checkAuth()
-    window.addEventListener('authChange', handleAuthChange)
-    
+    const handleAuthChange = () => checkAuth();
+    window.addEventListener("authChange", handleAuthChange);
+
     return () => {
-      window.removeEventListener('storage', checkAuth)
-      window.removeEventListener('authChange', handleAuthChange)
-    }
-  }, [])
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("authChange", handleAuthChange);
+    };
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated')
-    localStorage.removeItem('userEmail')
-    setIsAuthenticated(false)
-    setUserEmail(null)
-    
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new Event('authChange'))
-    
-    router.push('/')
-  }
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userEmail");
+    setIsAuthenticated(false);
+    setUserEmail(null);
 
-  const filteredNavigation = navigation.filter(item => 
-    !item.requiresAuth || (isAuthenticated === true)
-  )
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event("authChange"));
+
+    router.push("/");
+  };
+
+  const filteredNavigation = navigation.filter(
+    (item) => !item.requiresAuth || isAuthenticated === true
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
           <Link className="mr-6 flex items-center space-x-2" href="/">
-            <span className="hidden font-bold sm:inline-block">
-              Portfolio
-            </span>
+            <span className="hidden font-bold sm:inline-block">Portfolio</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {filteredNavigation.map((item) => (
@@ -74,8 +72,10 @@ export function Navigation() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'transition-colors hover:text-foreground/80',
-                  pathname === item.href ? 'text-foreground' : 'text-foreground/60'
+                  "transition-colors hover:text-foreground/80",
+                  pathname === item.href
+                    ? "text-foreground"
+                    : "text-foreground/60"
                 )}
               >
                 {item.name}
@@ -83,7 +83,7 @@ export function Navigation() {
             ))}
           </nav>
         </div>
-        
+
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <nav className="flex md:hidden">
@@ -92,8 +92,10 @@ export function Navigation() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'px-3 py-2 text-sm font-medium transition-colors hover:text-foreground/80',
-                    pathname === item.href ? 'text-foreground' : 'text-foreground/60'
+                    "px-3 py-2 text-sm font-medium transition-colors hover:text-foreground/80",
+                    pathname === item.href
+                      ? "text-foreground"
+                      : "text-foreground/60"
                   )}
                 >
                   {item.name}
@@ -101,27 +103,25 @@ export function Navigation() {
               ))}
             </nav>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             {isAuthenticated === null ? (
               // Loading state - show nothing or a placeholder
               <div className="w-16 h-9"></div>
             ) : isAuthenticated ? (
-              <>
-                <div className="hidden sm:flex items-center space-x-2 text-sm text-muted-foreground">
-                  <User className="h-4 w-4" />
-                  <span>{userEmail}</span>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">Logout</span>
-                </Button>
-              </>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <User className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">
+                  {userEmail?.split("@")[0]}
+                </span>
+                <LogOut className="h-4 w-4 ml-2" />
+                <span className="hidden sm:inline ml-2">Logout</span>
+              </Button>
             ) : (
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/login">
@@ -135,5 +135,5 @@ export function Navigation() {
         </div>
       </div>
     </header>
-  )
+  );
 }
