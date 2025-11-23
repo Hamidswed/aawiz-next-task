@@ -34,7 +34,6 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setValue,
     clearErrors,
   } = useForm<LoginFormData>({
@@ -54,6 +53,9 @@ export function LoginForm() {
         // Store auth state in localStorage (in real app, use proper auth)
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userEmail', data.email);
+        
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event('authChange'));
         
         // Redirect to dashboard
         router.push('/dashboard');

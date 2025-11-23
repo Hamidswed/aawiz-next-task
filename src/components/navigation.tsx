@@ -17,7 +17,7 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [userEmail, setUserEmail] = useState<string | null>(null)
 
   useEffect(() => {
@@ -48,11 +48,15 @@ export function Navigation() {
     localStorage.removeItem('userEmail')
     setIsAuthenticated(false)
     setUserEmail(null)
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('authChange'))
+    
     router.push('/')
   }
 
   const filteredNavigation = navigation.filter(item => 
-    !item.requiresAuth || isAuthenticated
+    !item.requiresAuth || (isAuthenticated === true)
   )
 
   return (
@@ -99,7 +103,10 @@ export function Navigation() {
           </div>
           
           <div className="flex items-center space-x-2">
-            {isAuthenticated ? (
+            {isAuthenticated === null ? (
+              // Loading state - show nothing or a placeholder
+              <div className="w-16 h-9"></div>
+            ) : isAuthenticated ? (
               <>
                 <div className="hidden sm:flex items-center space-x-2 text-sm text-muted-foreground">
                   <User className="h-4 w-4" />

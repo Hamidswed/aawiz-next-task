@@ -1,9 +1,30 @@
+'use client'
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Code, Database, Palette } from "lucide-react";
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const authStatus = localStorage.getItem('isAuthenticated');
+      setIsAuthenticated(authStatus === 'true');
+    };
+
+    checkAuth();
+    
+    // Listen for auth changes
+    const handleAuthChange = () => checkAuth();
+    window.addEventListener('authChange', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
+  }, []);
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
@@ -17,8 +38,9 @@ export default function Home() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg">
-            <Link href="/login">
-              Login to Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href={isAuthenticated ? "/dashboard" : "/login"} className="inline-flex items-center">
+              {isAuthenticated ? "Go to Dashboard" : "Login to Dashboard"}
+              <ArrowRight className="ml-2 h-4 w-4 flex-shrink-0" />
             </Link>
           </Button>
           <Button variant="outline" size="lg" asChild>
@@ -80,8 +102,9 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link href="/login">
-                Login to Explore <ArrowRight className="ml-2 h-4 w-4" />
+              <Link href={isAuthenticated ? "/dashboard" : "/login"} className="inline-flex items-center">
+                {isAuthenticated ? "Explore Dashboard" : "Login to Explore"}
+                <ArrowRight className="ml-2 h-4 w-4 flex-shrink-0" />
               </Link>
             </Button>
           </CardContent>
