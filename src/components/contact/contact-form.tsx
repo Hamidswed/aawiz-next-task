@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,7 +13,7 @@ import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
   subject: z.string().min(5, "Subject must be at least 5 characters"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
@@ -22,7 +22,9 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const {
     register,
@@ -35,19 +37,19 @@ export function ContactForm() {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
-    setSubmitStatus('idle');
+    setSubmitStatus("idle");
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // In a real app, you would send the data to your API
-      console.log('Form submitted:', data);
-      
-      setSubmitStatus('success');
+      console.log("Form submitted:", data);
+
+      setSubmitStatus("success");
       reset();
     } catch {
-      setSubmitStatus('error');
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -111,16 +113,17 @@ export function ContactForm() {
         )}
       </div>
 
-      {submitStatus === 'success' && (
+      {submitStatus === "success" && (
         <Alert className="border-green-200 bg-green-50 text-green-800">
           <CheckCircle className="h-4 w-4" />
           <AlertDescription>
-            Thank you! Your message has been sent successfully. We&apos;ll get back to you soon.
+            Thank you! Your message has been sent successfully. We&apos;ll get
+            back to you soon.
           </AlertDescription>
         </Alert>
       )}
 
-      {submitStatus === 'error' && (
+      {submitStatus === "error" && (
         <Alert className="border-destructive bg-destructive/10">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
@@ -136,7 +139,7 @@ export function ContactForm() {
             Sending...
           </>
         ) : (
-          'Send Message'
+          "Send Message"
         )}
       </Button>
     </form>
