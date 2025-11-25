@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
     // For this demo, we'll let the client-side AuthGuard handle it
     // since we're using localStorage for simplicity
     
-    // You could add server-side auth logic here if needed
+    // We could add server-side auth logic here if needed
     // const token = request.cookies.get('auth-token')
     // if (!token) {
     //   return NextResponse.redirect(new URL('/login', request.url))

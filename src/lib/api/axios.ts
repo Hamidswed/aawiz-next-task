@@ -12,7 +12,6 @@ const apiClient = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    // You can add tokens or other headers here
     return config;
   },
   (error) => {
