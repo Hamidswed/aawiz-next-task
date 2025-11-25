@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff, AlertCircle } from "lucide-react";
 
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -21,7 +21,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 // Demo credentials for testing
 const DEMO_CREDENTIALS = {
   email: "demo@portfolio.com",
-  password: "demo123"
+  password: "demo123",
 };
 
 export function LoginForm() {
@@ -46,24 +46,27 @@ export function LoginForm() {
 
     try {
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Check demo credentials
-      if (data.email === DEMO_CREDENTIALS.email && data.password === DEMO_CREDENTIALS.password) {
+      if (
+        data.email === DEMO_CREDENTIALS.email &&
+        data.password === DEMO_CREDENTIALS.password
+      ) {
         // Store auth state in localStorage (in real app, use proper auth)
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userEmail', data.email);
-        
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("userEmail", data.email);
+
         // Dispatch custom event to notify other components
-        window.dispatchEvent(new Event('authChange'));
-        
+        window.dispatchEvent(new Event("authChange"));
+
         // Redirect to dashboard
-        router.push('/dashboard');
+        router.push("/dashboard");
       } else {
-        setError('Invalid email or password. Try demo@portfolio.com / demo123');
+        setError("Invalid email or password. Try demo@portfolio.com / demo123");
       }
     } catch {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -71,8 +74,8 @@ export function LoginForm() {
 
   const fillDemoCredentials = () => {
     // Use React Hook Form's setValue to properly update the form
-    setValue('email', DEMO_CREDENTIALS.email);
-    setValue('password', DEMO_CREDENTIALS.password);
+    setValue("email", DEMO_CREDENTIALS.email);
+    setValue("password", DEMO_CREDENTIALS.password);
     // Clear any existing errors
     clearErrors();
   };
@@ -83,13 +86,15 @@ export function LoginForm() {
       <Alert className="border-blue-200 bg-blue-50 text-blue-800">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          <strong>Demo Credentials:</strong><br />
-          Email: demo@portfolio.com<br />
+          <strong>Demo Credentials:</strong>
+          <br />
+          Email: demo@portfolio.com
+          <br />
           Password: demo123
-          <Button 
-            type="button" 
-            variant="link" 
-            size="sm" 
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
             className="p-0 h-auto text-blue-600 ml-2"
             onClick={fillDemoCredentials}
           >
@@ -138,7 +143,9 @@ export function LoginForm() {
             </Button>
           </div>
           {errors.password && (
-            <p className="text-sm text-destructive">{errors.password.message}</p>
+            <p className="text-sm text-destructive">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -156,7 +163,7 @@ export function LoginForm() {
               Signing in...
             </>
           ) : (
-            'Sign In'
+            "Sign In"
           )}
         </Button>
       </form>
