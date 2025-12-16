@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://your-portfolio-url.com",
+    url: "https://aawiz-next-task-ok.vercel.app/",
     title: "Home | Portfolio Dashboard",
     description:
       "A modern portfolio dashboard built with Next.js 14, TypeScript, and Tailwind CSS. Features responsive design, dark mode, and seamless API integration.",
